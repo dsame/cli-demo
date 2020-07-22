@@ -1,0 +1,15 @@
+name: {{namespace}}
+channels:
+  {% if flavor == 'pytorch' %}- {{flavor}}{% endif %}
+dependencies:
+  - python=3.6
+  {% if flavor %}- {{flavor}}{% endif %}
+  - pytest-cov
+  - pylint
+  - tornado
+  - pip
+  - pip:
+    - oml
+    - bandit
+    {% if platform  == 'qas' %}- pythonnet{% endif %}
+    {% if platform  == 'qas' %}- QASOML{% endif %}

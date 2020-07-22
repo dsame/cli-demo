@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - oml/cli/*
+    exclude:
+      - oml/cli/README.md
+      - oml/cli/docs/*
+      - oml/cli/.vscode/*
+
+jobs:
+- job: Build_Test_Publish
+  timeoutInMinutes: 30
+  pool:
+    vmImage: windows-2019
+  variables:
+    EnableDetectorPip: true
+    system.debug: true
+    projectDirectory: oml/cli
+
+  steps:
+  - task: UsePythonVersion@0
+    displayName: Use Python 3.5
+    inputs:
+      versionSpec: 3.5
+      architecture: x64
+
+  - template: steps/setup-env.yml
+
+  - template: steps/run-tests.yml
+
+  - template: steps/static-analysis.yml
+
+  - template: steps/publish.yml

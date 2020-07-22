@@ -1,0 +1,14 @@
+{
+    "author": "OXO AI Platform Team",
+    "classifications": [
+        "Library"
+    ],
+    "name": "Inferencing DLIS Interface",
+    "identity": "Inferencing.DLIS",
+    "shortName": "dlis",
+    "tags": {
+        "language": "C#"
+    },
+    "sourceName": "Template",
+    "preferNameDirectory": "true"
+}

@@ -1,0 +1,17 @@
+name: {{ name }}
+
+version: {{ version }}
+
+owner: {{ owner }}
+
+language: {{ language }}
+
+flavor:
+  name: {{ flavor }}
+  version: {{ flavor_version }}
+
+schemas:
+  input: {{ input_schema }}
+  output: {{ output_schema }}
+
+platform: {{ platform }}

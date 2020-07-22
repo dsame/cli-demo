@@ -1,0 +1,28 @@
+steps:
+- task: RoslynAnalyzers@2
+  displayName: 'Run Roslyn Analyzers [static-analysis]'
+  inputs:
+    userProvideBuildInfo: msBuildInfo
+    msBuildVersion: 16.0
+    msBuildArchitecture: DotNetCore
+    msBuildCommandline: '"C:\Program Files\dotnet\dotnet.exe" build $(Build.SourcesDirectory)/$(projectDirectory)'
+
+- task: CredScan@2
+  displayName: Run CredScan [security-analysis]
+  inputs:
+    toolMajorVersion: V2
+
+- task: PublishSecurityAnalysisLogs@3
+  displayName: Publish Security Analysis Logs
+  inputs:
+    ArtifactName: CodeAnalysisLogs
+    ArtifactType: Container
+
+- task: PostAnalysis@1
+  displayName: Post Analysis
+  inputs:
+    AllTools: false
+    CredScan: true
+    RoslynAnalyzers: true
+    RoslynAnalyzersBreakOn: Error
+    ToolLogsNotFoundAction: Standard

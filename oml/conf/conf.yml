@@ -1,0 +1,31 @@
+app:
+  omlcli-client-id: 717e0428-4f46-4315-9b4c-4dc485609bea
+  tenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+azure:
+  data-lake-storage:
+    name: omldev
+  application-insights:
+    instrumentation-key: 9eb077c8-8129-48c7-b160-c3b6a47cb156
+    event-title: oml-prod
+  api:
+    uri: https://oml-api.azurewebsites.net
+  storage:
+    uri: https://storage.azure.com
+    account: omlmodels
+dlis:
+  api:
+    uri: https://oml-api.azurewebsites.net
+  model-store:
+    cosmos:
+      uri:
+        private: vc://cosmos09/dlismodelrepository/local/Models
+        public: https://cosmos09.osdinfra.net/cosmos/dlismodelrepository/local/Models
+    adls:
+      uri: adl://dlisstore.azuredatalakestore.net
+      store-name: dlisstore
+    cosmos-adls:
+      uri: adl://dlismodelrepository-c09.azuredatalakestore.net
+      store-name: dlismodelrepository-c09
+      public: https://cosmos09.osdinfra.net/cosmos/dlismodelrepository
+git-repository:
+  uri: https://office.visualstudio.com/DefaultCollection/GSX/_git/ModelRepository

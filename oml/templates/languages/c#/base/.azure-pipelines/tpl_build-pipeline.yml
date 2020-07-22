@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - {{rootdir}}/*
+    exclude:
+      - {{rootdir}}/README.md
+      - {{rootdir}}/.azure-pipelines/*
+      - {{rootdir}}/.gitignore
+
+jobs:
+- job: Build_Test_Publish
+  timeoutInMinutes: 20
+  pool:
+    vmImage: windows-2019
+  variables:
+    projectName: {{namespace}}
+    projectDirectory: {{rootdir}}
+    tags: 'production'
+
+  steps:
+  - template: steps/setup-env.yml
+
+  - template: steps/run-tests.yml
+
+  - task: ComponentGovernanceComponentDetection@0
+    displayName: Component Detection
+    inputs:
+      scanType: 'Register'
+      verbosity: 'Normal'
+      alertWarningLevel: 'High'
+
+  - template: steps/package.yml
+
+  - template: steps/static-analysis.yml
+
+  - template: steps/code-signing.yml
+
+  - template: steps/publish.yml

@@ -1,0 +1,8 @@
+include *.rst
+include oml/util/*.ps1
+recursive-include oml/conf *
+recursive-include oml/exec *
+recursive-include oml/templates *
+recursive-exclude oml/templates .coverage
+prune oml/templates/**/.tox
+prune oml/templates/**/__pycache__

@@ -1,0 +1,31 @@
+*.log
+*.sln.cache
+*.suo
+*.user
+*.userosscache
+.vs/
+.vscode/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+
+# Nuget
+packages/
+
+# OML temp folder
+.oml/
+
+# Unit testing
+TestResults/
+
+# NCrunch
+*.ncrunchsolution.user
+_NCrunch*/
+nCrunchTemp_*

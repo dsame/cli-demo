@@ -1,0 +1,41 @@
+steps:
+- script: |
+    call activate $(projectName)
+    pytest --junitxml=junit/test-results.xml --cov=$(projectName) --cov-report xml --cov-report html
+  displayName: Run Tests [test]
+  workingDirectory: $(projectDirectory)
+
+- script: |
+    call activate $(projectName)
+    pylint $(projectName)
+  displayName: Run Static Analysis [static-analysis]
+  workingDirectory: $(projectDirectory)
+
+- script: |
+    call activate $(projectName)
+    bandit --format xml --output test-bandit.xml --recursive $(projectName)
+  displayName: Run Security Analysis [security-analysis]
+  workingDirectory: $(projectDirectory)
+
+- task: PublishTestResults@2
+  displayName: Publish Test Results
+  inputs:
+    testResultsFiles: '**/test-*.xml'
+  condition: succeededOrFailed()
+
+- script: npm install -g juice
+  displayName: Prepare Code Coverage Report (1/2)
+
+- bash: |
+    for filename in *.html; do
+        juice "$filename" "$filename"
+    done
+  displayName: Prepare Code Coverage Report (2/2)
+  workingDirectory: $(projectDirectory)/htmlcov
+
+- task: PublishCodeCoverageResults@1
+  displayName: Publish Code Coverage Report
+  inputs:
+    codeCoverageTool: cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'

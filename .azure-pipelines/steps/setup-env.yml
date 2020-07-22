@@ -1,0 +1,24 @@
+steps:
+- script: |
+    python -m pip install --upgrade pip
+    pip install pipenv==2018.11.26
+    pip install setuptools==46.4.0
+  displayName: Upgrade Pip and Install Pipenv and Setuptools
+
+- task: NuGetToolInstaller@0
+  displayName: Use NuGet 4.3.0
+
+- task: NuGetCommand@2
+  displayName: NuGet Restore
+  inputs:
+    restoreSolution: $(projectDirectory)/oml/templates/platforms/dlis/c#/TemplateInference/TemplateInference.csproj
+    feedsToUse: config
+    nugetConfigPath: $(projectDirectory)/oml/templates/platforms/dlis/c#/nuget.config
+    externalFeedCredentials: Bing
+
+- script: |
+    echo ENVIRONMENT=dev>> .env
+    pipenv install --dev --deploy --python=python.exe
+    echo pipenv run python --version
+  workingDirectory: $(projectDirectory)
+  displayName: Create Virtual Environment

@@ -1,0 +1,13 @@
+steps:
+- script: pipenv check
+  workingDirectory: $(projectDirectory)
+  displayName: Security Vulnerability Check
+  enabled: false
+
+- script: pipenv run flake8 oml tests
+  workingDirectory: $(projectDirectory)
+  displayName: Flake8
+
+- script: pipenv run bandit --format xml --output test-bandit.xml --recursive oml
+  workingDirectory: $(projectDirectory)
+  displayName: Bandit

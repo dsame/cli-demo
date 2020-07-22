@@ -1,0 +1,4 @@
+[flake8]
+ignore = E128,W503
+max-line-length = 120
+exclude = tpl_*,oml/templates/platforms

@@ -1,0 +1,51 @@
+{
+  "dependencies": [],
+  "description": "",
+  "location": "",
+  "name": "TellMe",
+  "params": {
+    "model": {
+      "frameworkVersion": "1.6.0-rc0",
+      "graphVersion": 26,
+      "interfaces": [
+        {
+          "inputs": [
+            {
+              "description": "From signature: input 1 with tensor name input1",
+              "internalName": "input_1:0",
+              "name": "input1",
+              "shape": "[None, 40]",
+              "type": "DATA_TYPE_INT32"
+            },
+            {
+              "description": "From signature: input 2 with tensor name input2",
+              "internalName": "input_2:0",
+              "name": "input2",
+              "shape": "[None, 40]",
+              "type": "DATA_TYPE_FLOAT"
+            }
+          ],
+          "name": "serving_default",
+          "outputs": [
+            {
+              "description": "From signature: output 1 with tensor name index",
+              "internalName": "top10:1",
+              "name": "index",
+              "shape": "[None, 10]",
+              "type": "DATA_TYPE_INT32"
+            },
+            {
+              "description": "From signature: output 2 with tensor name probability",
+              "internalName": "top10:0",
+              "name": "probability",
+              "shape": "[None, 10]",
+              "type": "DATA_TYPE_FLOAT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "typeName": "TensorFlowModel",
+  "version": 1
+}

@@ -1,0 +1,6 @@
+steps:
+- script: |
+    call activate $(projectName)
+    oml package --platform dlis --skip-archive
+  displayName: Package
+  workingDirectory: $(projectDirectory)

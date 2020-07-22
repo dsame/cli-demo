@@ -1,0 +1,21 @@
+steps:
+- task: PipAuthenticate@0
+  displayName: Authenticate PyPi Feeds
+  inputs:
+    artifactFeeds: AIPlatform
+
+- powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
+  displayName: Add Conda to PATH
+
+- script: |
+    call activate
+    conda env create -f env-dev.yml --quiet
+  displayName: Create Conda Environment
+  workingDirectory: $(projectDirectory)
+
+- script: |
+    call activate $(projectName)
+    conda list
+  displayName: List Conda Packages
+  workingDirectory: $(projectDirectory)
+  condition: eq(variables['System.Debug'], 'True')

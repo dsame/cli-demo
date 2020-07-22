@@ -1,0 +1,14 @@
+{
+    "author": "OXO AI Platform Team",
+    "classifications": [
+        "Library"
+    ],
+    "name": "Inferencing DLIS Interface V3 with Binary Input Support",
+    "identity": "Inferencing.DLIS",
+    "shortName": "dlisv3binary",
+    "tags": {
+        "language": "C#"
+    },
+    "sourceName": "Template",
+    "preferNameDirectory": "true"
+}

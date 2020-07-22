@@ -1,0 +1,3 @@
+# ======= DO NOT EDIT ANYTHING BELOW THIS LINE ========
+SCORE_FILE_NAME = '.score'
+# ======= DO NOT EDIT ANYTHING ABOVE THIS LINE ========

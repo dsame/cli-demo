@@ -1,0 +1,5 @@
+steps:
+- script: |
+    oml package
+  displayName: Package
+  workingDirectory: $(projectDirectory)

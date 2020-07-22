@@ -1,0 +1,27 @@
+steps:
+- script: pipenv run pytest --verbose --junitxml=junit/test-results.xml --cov=oml --cov-report=xml:$(Build.SourcesDirectory)/$(projectDirectory)/coverage.xml --cov-report=html:$(Build.SourcesDirectory)/$(projectDirectory)/htmlcov
+  workingDirectory: $(projectDirectory)
+  displayName: Run Tests
+
+- task: PublishTestResults@2
+  displayName: Publish Test Results
+  inputs:
+    testResultsFiles: '**/test-*.xml'
+  condition: succeededOrFailed()
+
+- script: npm install -g juice
+  displayName: Prepare Code Coverage (1/2)
+
+- bash: |
+    for filename in *.html; do
+      juice "$filename" "$filename"
+    done
+  displayName: Prepare Code Coverage (2/2)
+  workingDirectory: $(projectDirectory)/htmlcov
+
+- task: PublishCodeCoverageResults@1
+  displayName: Publish Code Coverage Report
+  inputs:
+    codeCoverageTool: cobertura
+    summaryFileLocation: $(Build.SourcesDirectory)/$(projectDirectory)/coverage.xml
+    reportDirectory: $(Build.SourcesDirectory)/$(projectDirectory)/htmlcov

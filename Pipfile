@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+oml = {editable = true,path = "."}
+
+[dev-packages]
+bandit = "*"
+flake8 = "*"
+twine = "*"
+pytest-cov = "*"
+responses = "==0.9.0"
+
+[requires]
+python_version = "3.5"

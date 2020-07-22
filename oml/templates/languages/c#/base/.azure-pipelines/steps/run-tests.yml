@@ -1,0 +1,7 @@
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Run Tests with Code Coverage [test]
+  inputs:
+    command: test
+    projects: $(projectDirectory)/*.sln
+    arguments: --collect "Code Coverage"

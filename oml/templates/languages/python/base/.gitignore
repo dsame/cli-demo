@@ -1,0 +1,33 @@
+# OML temp folder
+.oml/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+sdist/
+wheels/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Sphinx documentation
+docs/_build/
+
+# Unit test / coverage reports
+.tox/
+.coverage
+.pytest_cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/

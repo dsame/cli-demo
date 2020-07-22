@@ -1,0 +1,14 @@
+{
+    "author": "OXO AI Platform Team",
+    "classifications": [
+        "Console"
+    ],
+    "name": "OXO Tell Me Model",
+    "identity": "OXO.TellMe.Model",
+    "shortName": "tellmemodel",
+    "tags": {
+        "language": "C#"
+    },
+    "sourceName": "Template",
+    "preferNameDirectory": "true"
+}

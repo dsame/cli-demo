@@ -1,0 +1,12 @@
+# ======= DO NOT EDIT ANYTHING BELOW THIS LINE ========
+SCORE_FILE_NAME = '.score'
+# ======= DO NOT EDIT ANYTHING ABOVE THIS LINE ========
+
+PAD_CHAR = '<PAD>'
+UNK_CHAR = '<UNK>'
+SEQ_LEN = 30
+NUM_VAL_SENTENCES = 2
+BATCH_SIZE = 256
+
+VALIDATION_FILE_NAME = 'validation.txt'
+VOCAB_FILE_NAME = 'vocab.txt'

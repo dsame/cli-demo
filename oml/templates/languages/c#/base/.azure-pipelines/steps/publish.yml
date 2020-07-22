@@ -1,0 +1,6 @@
+steps:
+- task: PublishBuildArtifacts@1
+  displayName: Publish OML Package
+  inputs:
+    pathtoPublish: $(projectDirectory)/.oml/package
+    artifactName: .oml/package

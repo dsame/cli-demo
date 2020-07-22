@@ -1,0 +1,31 @@
+steps:
+- script: |
+    call activate $(projectName)
+    oml dlis manifest
+  displayName: Create Manifests
+  workingDirectory: $(projectDirectory)/.oml/
+
+- task: SFP.build-tasks.custom-build-task-1.EsrpCodeSigning@1
+  displayName: ESRP CodeSigning JSON Manifest
+  inputs:
+    ConnectedServiceName: ESRP CodeSigning VSTS
+    FolderPath: $(projectDirectory)/.oml/
+    Pattern: SecureManifest.json
+    signConfigType: inlineSignParams
+    inlineOperation: |
+     [
+         {
+             "keyCode": "CP-230012",
+             "operationSetCode": "JsonSign",
+             "parameters": [],
+             "toolName": "sign",
+             "toolVersion": "1.0"
+         }
+     ]
+
+- task: ArchiveFiles@2
+  displayName: 'Archive conda'
+  inputs:
+    rootFolderOrFile: '$(projectDirectory)/.oml/env/$(projectName)/'
+    includeRootFolder: false
+    archiveFile: '$(projectDirectory)/.oml/package/conda/$(projectName).zip'

@@ -1,0 +1,21 @@
+steps:
+- task: PipAuthenticate@0
+  displayName: Authenticate PyPi Feeds
+  inputs:
+    artifactFeeds: AIPlatform
+
+- script: |
+    python -m pip install -U pip
+    pip install oml
+  displayName: Install OML
+
+- task: NuGetToolInstaller@0
+  displayName: Use NuGet 4.3.0
+
+- task: NuGetCommand@2
+  displayName: NuGet Restore
+  inputs:
+    restoreSolution: '$(projectDirectory)/**/*.csproj'
+    feedsToUse: config
+    nugetConfigPath: $(projectDirectory)/nuget.config
+    externalFeedCredentials: Bing

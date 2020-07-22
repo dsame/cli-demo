@@ -1,0 +1,12 @@
+steps:
+- script: |
+    pipenv run python setup.py bdist_wheel
+    pipenv run twine upload dist/*
+  workingDirectory: $(projectDirectory)
+  displayName: Publish
+  continueOnError: true
+  env:
+    TWINE_USERNAME: AIPlatform
+    TWINE_PASSWORD: $(System.AccessToken)
+    TWINE_REPOSITORY_URL: https://pkgs.dev.azure.com/office/_packaging/AIPlatform/pypi/upload
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))

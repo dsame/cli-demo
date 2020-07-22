@@ -1,0 +1,154 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - {{rootdir}}/*
+    exclude:
+      - {{rootdir}}/README.md
+      - {{rootdir}}/.azure-pipelines/*
+      - {{rootdir}}/.gitignore
+      - {{rootdir}}/.vscode/*
+
+jobs:
+- job: Build_Deploy
+  timeoutInMinutes: 30
+  pool:
+    vmImage: windows-2019
+  variables:
+  - group: OML_KEYVAULT
+  - name: projectName
+    value: {{namespace}}
+  - name: projectDirectory
+    value: {{rootdir}}
+  - name: EnableDetectorPip
+    value: True
+
+  steps:
+{%- if language == 'python' %}
+  - template: steps/conda-env.yml
+
+  - script: |
+      call activate $(projectName)
+      oml test
+    displayName: OML Test
+    workingDirectory: $(projectDirectory)
+
+  - script: |
+      call activate $(projectName)
+      oml package
+    displayName: OML Package
+    workingDirectory: $(projectDirectory)
+
+  - script: |
+      call activate $(projectName)
+      oml publish --non-compliant
+    displayName: OML Publish
+    workingDirectory: $(projectDirectory)
+    env:
+      OML_CLI_KEY: $(omlclikey)
+{%- else %}
+  - template: steps/setup-env.yml
+
+  - template: steps/run-tests.yml
+
+  - template: steps/package.yml
+
+  - script: |
+      oml publish --non-compliant
+    displayName: Publish package to ADLS
+    workingDirectory: $(projectDirectory)
+    env:
+      OML_CLI_KEY: $(omlclikey)
+{%- endif %}
+
+  - task: PythonScript@0
+    displayName: 'OML DLIS test and wait for test to finish'
+    inputs:
+      scriptSource: inline
+      script: |
+        import subprocess
+        import re
+        import json
+        import time
+
+        print("Submitting test")
+{%- if language == 'python' %}
+        res = subprocess.check_output("activate $(projectName) && oml -v dlis test", shell=True).decode('utf-8')
+{%- else %}
+        res = subprocess.check_output("oml -v dlis test", shell=True).decode('utf-8')
+{%- endif %}
+        print(res)
+        p = re.compile("(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}")
+        guid = p.search(res).group(0)
+
+        status = "Running"
+        while status  == "Running" or status == "Queued":
+{%- if language == 'python' %}
+          res = subprocess.check_output("activate $(projectName) && oml -v dlis show --id {}".format(guid), shell=True).decode('utf-8')
+{%- else %}
+          res = subprocess.check_output("oml -v dlis show --id {}".format(guid), shell=True).decode('utf-8')
+{%- endif %}
+          jsonres = json.loads(res)
+          if jsonres is None:
+            print("##vso[task.logissue type=error;]No test with id {} was found in the submitted jobs.".format(guid))
+            break
+          status = jsonres["Status"]
+          if status == "Succeeded":
+            print("Polaris test passed successfully")
+            break
+          if status == "Failed":
+            print("##vso[task.logissue type=error;]The Polaris test with id {} failed.".format(guid))
+            break
+          print("Waiting for Polaris test to finish")
+          time.sleep(30) # in seconds
+      workingDirectory: $(projectDirectory)
+      failOnStderr: true
+    env:
+      OML_CLI_KEY: $(omlclikey)
+
+  - task: PythonScript@0
+    displayName: 'OML DLIS deploy and wait for deployment to finish'
+    inputs:
+      scriptSource: inline
+      script: |
+        import subprocess
+        import re
+        import json
+        import time
+
+        print("Submitting deployment")
+{%- if language == 'python' %}
+        res = subprocess.check_output("activate $(projectName) && oml -v dlis deploy --namespace $(namespace)", shell=True).decode('utf-8')
+{%- else %}
+        res = subprocess.check_output("oml -v dlis deploy --namespace $(namespace)", shell=True).decode('utf-8')
+{%- endif %}
+        print(res)
+        p = re.compile("(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}")
+        guid = p.search(res).group(0)
+
+        status = "Running"
+        while status  == "Running" or status == "Queued":
+{%- if language == 'python' %}
+          res = subprocess.check_output("activate $(projectName) && oml -v dlis show -r deployment --id {}".format(guid), shell=True).decode('utf-8')
+{%- else %}
+          res = subprocess.check_output("oml -v dlis show -r deployment --id {}".format(guid), shell=True).decode('utf-8')
+{%- endif %}
+          jsonres = json.loads(res)
+          if jsonres is None:
+            print("##vso[task.logissue type=error;]No deployment with id {} was found in the submitted jobs.".format(guid))
+            break
+          status = jsonres["Status"]
+          if status == "Succeeded":
+            print("Deployment succeeded")
+            break
+          if status == "Failed":
+            print("##vso[task.logissue type=error;]The deployment with id {} failed.".format(guid))
+            break
+          print("Waiting for deployment to finish")
+          time.sleep(30) # in seconds
+      workingDirectory: $(projectDirectory)
+      failOnStderr: true
+    env:
+      OML_CLI_KEY: $(omlclikey)
