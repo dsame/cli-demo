@@ -14,7 +14,7 @@ steps:
     restoreSolution: $(projectDirectory)/oml/templates/platforms/dlis/c#/TemplateInference/TemplateInference.csproj
     feedsToUse: config
     nugetConfigPath: $(projectDirectory)/oml/templates/platforms/dlis/c#/nuget.config
-    externalFeedCredentials: Bing
+    #    externalFeedCredentials: Bing
 
 - script: |
     echo ENVIRONMENT=dev>> .env
