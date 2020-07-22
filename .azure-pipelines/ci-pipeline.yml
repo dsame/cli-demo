@@ -33,4 +33,4 @@ jobs:
 
   - template: steps/static-analysis.yml
 
-  - template: steps/publish.yml
+#- template: steps/publish.yml
