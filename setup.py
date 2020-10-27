@@ -16,7 +16,7 @@ DEPENDENCIES = [
     'bottle~=0.12',
     'click~=7.0',
     'colorama~=0.4.1',
-    'cryptography==2.8',
+    'cryptography==3.2',
     'GitPython>=2.1.0',
     'Jinja2~=2.10.1',
     'PTable==0.9.2',
