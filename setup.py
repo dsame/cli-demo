@@ -23,7 +23,7 @@ DEPENDENCIES = [
     'pyopenssl==19.1.0',
     'PyYAML>=5.1',
     'requests>=2.0',
-    'rsa==4.0',
+    'rsa==4.7',
     'ruamel.yaml==0.16.10',
 ]
 
